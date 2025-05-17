@@ -1,0 +1,69 @@
+import time
+
+class Stopwatch:
+    def __init__(self):
+        self.start_time = None
+        self.elapsed_time = 0
+        self.running = False
+        self.laps = []
+
+    def start(self):
+        if not self.running:
+            self.start_time = time.time() - self.elapsed_time  # Resume from elapsed time
+            self.running = True
+            print("Stopwatch started.")
+
+    def pause(self):
+        if self.running:
+            self.elapsed_time = time.time() - self.start_time
+            self.running = False
+            print(f"Stopwatch paused at {self.format_time(self.elapsed_time)}.")
+
+    def lap(self):
+        if self.running:
+            lap_time = time.time() - self.start_time
+            self.laps.append(lap_time)
+            print(f"Lap {len(self.laps)}: {self.format_time(lap_time)}")
+
+    def reset(self):
+        self.start_time = None
+        self.elapsed_time = 0
+        self.running = False
+        self.laps = []
+        print("Stopwatch reset.")
+
+    def format_time(self, seconds):
+        mins, secs = divmod(seconds, 60)
+        return f"{int(mins)} min {secs:.2f} sec"
+
+    def display_laps(self):
+        if self.laps:
+            print("\nLap times:")
+            for i, lap in enumerate(self.laps, 1):
+                print(f"Lap {i}: {self.format_time(lap)}")
+        else:
+            print("No laps recorded.")
+
+def main():
+    stopwatch = Stopwatch()
+
+    while True:
+        command = input("\nEnter command (start/pause/lap/reset/exit): ").strip().lower()
+
+        if command == "start":
+            stopwatch.start()
+        elif command == "pause":
+            stopwatch.pause()
+        elif command == "lap":
+            stopwatch.lap()
+        elif command == "reset":
+            stopwatch.reset()
+        elif command == "exit":
+            stopwatch.display_laps()
+            print("Exiting stopwatch.")
+            break
+        else:
+            print("Invalid command. Try start, pause, lap, reset, or exit.")
+
+if __name__ == "__main__":
+    main()
